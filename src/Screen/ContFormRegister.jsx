@@ -8,7 +8,7 @@ export default function ContFormRegister({ handleRender }) {
         <LinearGradient colors={['#fff', '#d71b7b']} style={styles.container}>
             <View style={styles.bienvenida}>
                 <Image source={Logomr} style={styles.logo} />
-                <Text style={styles.welcomeH2}>Welcome</Text>
+                <Text style={styles.welcomeH2}>Welcome!</Text>
             </View>
             <FormRegister handleRender={handleRender} />
         </LinearGradient>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     bienvenida: {
-        marginTop: 10,
+        marginTop: 100,
         alignItems: 'center',
         justifyContent: "flex-start",
     },

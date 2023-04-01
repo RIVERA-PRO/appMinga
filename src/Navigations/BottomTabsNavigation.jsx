@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from '../Screen/Home'
 import ContFormRegister from "../Screen/ContFormRegister";
-
+import Mangas from "../Screen/Mangas";
 
 const Tab = createBottomTabNavigator()
 
@@ -18,11 +18,13 @@ function BottomTabsNavigation() {
                     backgroundColor: '#d71b7b',
                 },
                 tabBarLabelStyle: {
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: 'bold',
+                    padding: 16,
                 },
                 tabBarActiveTintColor: '#fff',
                 tabBarInactiveTintColor: '#000',
+                headerShown: false,
             }} />
             <Tab.Screen
                 name='Register'
@@ -32,14 +34,30 @@ function BottomTabsNavigation() {
                         backgroundColor: '#d71b7b',
                     },
                     tabBarLabelStyle: {
-                        fontSize: 10,
+                        fontSize: 13,
                         fontWeight: 'bold',
+                        borderRadius: 5,
+                        padding: 16,
                     },
                     tabBarActiveTintColor: '#fff',
                     tabBarInactiveTintColor: '#000',
+                    headerShown: false,
                 }}
             />
 
+            <Tab.Screen name='Mangas' component={Mangas} options={{
+                tabBarStyle: {
+                    backgroundColor: '#d71b7b',
+                },
+                tabBarLabelStyle: {
+                    fontSize: 13,
+                    fontWeight: 'bold',
+                    padding: 16,
+                },
+                tabBarActiveTintColor: '#fff',
+                tabBarInactiveTintColor: '#000',
+                headerShown: false,
+            }} />
         </Tab.Navigator>
     )
 }

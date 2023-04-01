@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         padding: 11,
         borderRadius: 5,
-        color: "#ffff",
+        color: "#000",
     },
     divCheck: {
         display: "flex",
