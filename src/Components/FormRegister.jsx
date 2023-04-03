@@ -4,7 +4,8 @@ import { View, TextInput, Text, TouchableOpacity, StyleSheet, Image } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
 import google from "../../assets/Googlee.png"
-
+import { Modal } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 export default function FormRegister() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ export default function FormRegister() {
     const [password, setPassword] = useState('');
     const navigation = useNavigation()
     const [loading, setLoading] = useState()
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     async function handleSubmit() {
         let data = {
@@ -26,6 +28,7 @@ export default function FormRegister() {
             setLoading(true)
             await axios.post(url, data)
             console.log('creado')
+            setIsModalVisible(true); // mostrar el modal
             setTimeout(() => {
                 setLoading(false);
             }, 3000);
@@ -76,7 +79,7 @@ export default function FormRegister() {
 
             <View style={styles.divGoogle}>
                 <TouchableOpacity style={styles.button2} onPress={() => {
-                    // handle Google sign up logic here
+
                 }}>
                     <Image style={styles.googleImg} source={google} />
                     <Text style={styles.buttonText2}>Sign up with Google</Text>
@@ -91,10 +94,47 @@ export default function FormRegister() {
                     }}> Log in</Text>
                 </Text>
             </View>
+            <Modal visible={isModalVisible}>
+
+                <LinearGradient colors={['#000', '#d71b7b', '#d71b7b']} style={styles.modalContainer}>
+                    <Text style={styles.modalText}>User created</Text>
+                    <Text style={styles.modalText2}>YOU MUST VERIFY YOUR ACCOUNT</Text>
+                    <TouchableOpacity onPress={() => setIsModalVisible(false)}>
+                        <Text style={styles.modalButton}>Close</Text>
+                    </TouchableOpacity>
+                </LinearGradient>
+
+            </Modal>
+
         </View>
     );
 }
 const styles = StyleSheet.create({
+
+    modalContainer: {
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%'
+    },
+    modalText: {
+        fontSize: 20,
+        marginBottom: 20,
+        color: '#fff',
+    },
+    modalText2: {
+        fontSize: 18,
+        marginBottom: 20,
+        color: '#fff',
+    },
+    modalButton: {
+        fontSize: 18,
+        color: '#000',
+        backgroundColor: '#fff',
+        padding: 5,
+        borderRadius: 8,
+    },
+
     container: {
         display: "flex",
         flexDirection: "column",

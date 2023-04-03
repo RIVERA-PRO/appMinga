@@ -2,17 +2,17 @@ import { createReducer } from "@reduxjs/toolkit"
 import actions from './actions'
 
 
-const { captureChapter, captureManga} = actions
+const { captureChapter, captureManga } = actions
 
 const initialstate = {
-   manga:[],
-   chapter:[],
+    manga: [],
+    chapter: [],
 }
 
 const reducer = createReducer(
     initialstate,
     (builder) => builder
-   .addCase(
+        .addCase(
             captureManga.fulfilled,
             (state, action) => {
                 let newState = {
@@ -22,16 +22,16 @@ const reducer = createReducer(
                 return newState
             }
         )
-      .addCase(
+        .addCase(
             captureChapter.fulfilled,
-            (state,action)=>{
+            (state, action) => {
                 let newState = {
                     ...state,
                     chapter: action.payload.chapter
                 }
                 return newState
             }
-        ) 
-     
+        )
+
 )
-export default reducer  
+export default reducer

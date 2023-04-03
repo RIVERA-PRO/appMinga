@@ -1,15 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import detailsActions from "../Store/Details/actions"
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 
-export default function CardMangas({ title, category, photo }) {
+const { mangaClicked } = detailsActions
+
+export default function CardMangas({ title, category, photo, _id }) {
+  const [loading, setLoading] = useState()
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const categoryColor = {
     shonen: { color: '#EF8481' },
     shojo: { color: '#00BA88' },
     seinen: { color: '#FC9C57' },
     comic: { color: '#8883F0' }
   };
+
+  function goToDetailsScreen() {
+    dispatch(mangaClicked({ state: true }))
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+      navigation.navigate('Details', { _id });
+    }, 500);
+
+  }
 
   return (
     <View style={styles.card}>
@@ -20,24 +37,24 @@ export default function CardMangas({ title, category, photo }) {
         </View>
         <Text
           style={styles.read}
-          onPress={() => {
-            navigation.navigate('register');
-          }}
+
+          onPress={goToDetailsScreen}
         >
-          Read
+          Details
         </Text>
+
       </View>
 
       <View style={styles.imgContainer}>
         <Image style={styles.imgManga} source={photo} />
       </View>
+      <Spinner visible={loading} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "rgba(238, 238, 238, 0.7)",
+    backgroundColor: "rgba(228, 228, 228, 0.7)",
     flexDirection: 'row',
     marginVertical: 10,
     width: "95%",

@@ -9,13 +9,13 @@ import Mangas from "../Screen/Mangas";
 import Perfil from "../Screen/Perfil";
 import LogOut from "../Screen/LogOut";
 import { FontAwesome } from '@expo/vector-icons';
-
+import Details from "../Screen/Details";
 const Tab = createBottomTabNavigator();
 
 function BottomTabsNavigation() {
     let state = useSelector((store) => store.bottomTabsReducer.state);
     let [token, setToken] = useState("");
-
+    const details = useSelector((store) => store.mangaClickReducer.state);
     useFocusEffect(
         React.useCallback(() => {
             async function getData() {
@@ -52,6 +52,7 @@ function BottomTabsNavigation() {
 
             }}
         >
+
             <Tab.Screen
 
                 name="Home"
@@ -70,8 +71,25 @@ function BottomTabsNavigation() {
                     ),
                 }}
             />
+
             {token ? (
                 <>
+                    {details ? (<Tab.Screen
+                        name="Details"
+                        component={Details}
+                        options={{
+                            tabBarStyle: {
+                                backgroundColor: '#d71b7b',
+                            },
+                            activeTintColor: '#fff',
+                            inactiveTintColor: '#9B9B9B',
+                            headerShown: false,
+                            tabBarLabel: 'Details',
+                            tabBarIcon: ({ color }) => (
+                                <FontAwesome name="info" size={24} color={color} />
+                            ),
+                        }}
+                    />) : (<></>)}
                     <Tab.Screen
                         name="Mangas"
                         component={Mangas}

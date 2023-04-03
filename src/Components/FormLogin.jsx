@@ -6,10 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import bottomTabsActions from '../Store/Perfil/action';
 const { reloadBottomTabs } = bottomTabsActions
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import BienvenidaRegister from './BienvenidaRegister';
+
 import axios from 'axios';
 import google from "../../assets/Googlee.png"
-
 export default function FormLogin() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
@@ -31,12 +30,10 @@ export default function FormLogin() {
             const response = await axios.post(url, data);
             const { token, user } = response.data;
 
-            // Almacenar el token en AsyncStorage y luego imprimir el valor almacenado
             await AsyncStorage.setItem('token', token);
             const storedToken = await AsyncStorage.getItem('token');
             console.log('Token almacenado:', storedToken);
 
-            // Almacenar los datos del usuario en AsyncStorage y luego imprimir el valor almacenado
             await AsyncStorage.setItem('user', JSON.stringify({
                 name: user.name,
                 email: user.email,
@@ -46,6 +43,7 @@ export default function FormLogin() {
             console.log('Usuario almacenado:', storedUser);
             console.log('logueado');
             dispatch(reloadBottomTabs({ state: !state }))
+
             setTimeout(() => {
                 setLoading(false);
             }, 2000);
@@ -93,7 +91,7 @@ export default function FormLogin() {
                 <TouchableOpacity
                     style={styles.button2}
                     onPress={() => {
-                        // handle Google sign up logic here
+
                     }}
                 >
                     <Image style={styles.googleImg} source={google} />
@@ -115,6 +113,7 @@ export default function FormLogin() {
                     </Text>
                 </Text>
             </View>
+
         </View>
     );
 };
