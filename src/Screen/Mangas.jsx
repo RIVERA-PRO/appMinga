@@ -32,7 +32,7 @@ export default function Mangas() {
   }, [currentPage, searchQuery]);
 
   useEffect(() => {
-    axios.get("https://minga-host.onrender.com/mangas-form")
+    axios.get("https://minga-0gy1.onrender.com/mangas")
       .then(response => {
         setCate(response.data.categories);
       })

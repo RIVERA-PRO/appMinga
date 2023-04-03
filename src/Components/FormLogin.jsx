@@ -1,54 +1,101 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import bottomTabsActions from '../Store/Perfil/action';
+const { reloadBottomTabs } = bottomTabsActions
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import BienvenidaRegister from './BienvenidaRegister';
 import axios from 'axios';
 import google from "../../assets/Googlee.png"
 
-export default function LoginForm() {
-    const navigation = useNavigation()
+export default function FormLogin() {
+    const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch()
+    let state = useSelector(store => store.bottomTabsReducer.state)
+    const [loading, setLoading] = useState()
 
     async function handleSubmit() {
         let data = {
             email: email,
             password: password
-        }
-        console.log(data);
-        let url = 'https://minga-host.onrender.com/auth/signin'
+        };
+
+        let url = 'https://minga-0gy1.onrender.com/auth/signin';
+
         try {
-            await axios.post(url, data)
-            console.log('logueado')
-            navigation.navigate("Home");
+            setLoading(true)
+            const response = await axios.post(url, data);
+            const { token, user } = response.data;
+
+            // Almacenar el token en AsyncStorage y luego imprimir el valor almacenado
+            await AsyncStorage.setItem('token', token);
+            const storedToken = await AsyncStorage.getItem('token');
+            console.log('Token almacenado:', storedToken);
+
+            // Almacenar los datos del usuario en AsyncStorage y luego imprimir el valor almacenado
+            await AsyncStorage.setItem('user', JSON.stringify({
+                name: user.name,
+                email: user.email,
+                photo: user.photo,
+            }));
+            const storedUser = await AsyncStorage.getItem('user');
+            console.log('Usuario almacenado:', storedUser);
+            console.log('logueado');
+            dispatch(reloadBottomTabs({ state: !state }))
+            setTimeout(() => {
+                setLoading(false);
+            }, 2000);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
-
     return (
+
         <View style={styles.container}>
+
             <View style={styles.fieldset}>
                 <Text style={styles.legend}>Email</Text>
                 <View style={styles.legendCont}>
-                    <TextInput style={styles.input} id="email" name="email" required onChangeText={(inputText => setEmail(inputText))} />
+                    <TextInput
+                        style={styles.input}
+                        id="email"
+                        name="email"
+                        required
+                        onChangeText={(inputText) => setEmail(inputText)}
+                    />
                 </View>
             </View>
 
             <View style={styles.fieldset}>
                 <Text style={styles.legend}>Password</Text>
                 <View style={styles.legendCont}>
-                    <TextInput style={styles.input} secureTextEntry={true} id="password" name="password" required onChangeText={(inputText => setPassword(inputText))} />
+                    <TextInput
+                        style={styles.input}
+                        secureTextEntry={true}
+                        id="password"
+                        name="password"
+                        required
+                        onChangeText={(inputText) => setPassword(inputText)}
+                    />
                 </View>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Sign in</Text>
+                <Spinner visible={loading} textContent={'Loading...'} textStyle={{ color: '#FFF' }} />
             </TouchableOpacity>
 
             <View style={styles.divGoogle}>
-                <TouchableOpacity style={styles.button2} onPress={() => {
-                    // handle Google sign up logic here
-                }}>
+                <TouchableOpacity
+                    style={styles.button2}
+                    onPress={() => {
+                        // handle Google sign up logic here
+                    }}
+                >
                     <Image style={styles.googleImg} source={google} />
                     <Text style={styles.buttonText2}>Sign in with Google</Text>
                 </TouchableOpacity>
@@ -57,15 +104,20 @@ export default function LoginForm() {
             <View style={styles.parrafosForm}>
                 <Text>
                     You don't have an account yet?
-                    <Text style={styles.parrafosFormText} onPress={() => {
-                        navigation.navigate("register");
-                    }}> Sign up</Text>
+                    <Text
+                        style={styles.parrafosFormText}
+                        onPress={() => {
+                            navigation.navigate('register');
+                        }}
+                    >
+                        {' '}
+                        Sign up
+                    </Text>
                 </Text>
             </View>
         </View>
     );
-}
-
+};
 const styles = StyleSheet.create({
     container: {
         display: "flex",
@@ -138,7 +190,7 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: "black",
         marginBottom: 20,
-        width: "90%",
+        width: "92%",
         justifyContent: "center",
         alignItems: "center",
         padding: 10,
@@ -156,10 +208,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         height: 60,
         margin: 15,
-        width: "79%",
+        width: "80%",
         justifyContent: "center",
         alignItems: "center",
-        borderWidth: 1,
         flexDirection: "row",
         gap: 20,
         padding: 10,
